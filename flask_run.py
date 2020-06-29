@@ -115,7 +115,7 @@ def fuel_watch():
 
 <nav>
     <h3 class="logo">Marks Fuel Watch Project</h3>
-    <a href="About.html" color:"#27AE60" target="_blank">About Project</a>
+    <a href="/about" color:"#27AE60" target="_blank">About Project</a>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <a href="https://www.fuelwatch.wa.gov.au" target="_blank">Fuel Watch Website</a>
 </nav>
