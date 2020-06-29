@@ -204,27 +204,6 @@ def generate_fuel_watch_html_string(filtered=True, **kwargs):
     """
 
     """
-    if kwargs:
-        kwargs = kwargs
-    else:
-        kwargs = {"Region": '',
-              "Suburb": '',
-              "Product": 'Unleaded Petrol',
-              "Day": '',
-              "Surrounding": 'yes',
-              "Brand": '',
-              "Sort_on": 'price',
-              "keys_of_interest": [
-                  'updated',
-                  'price',
-                  'trading-name',
-                  'brand',
-                  'address',
-                  'location',
-              ],
-              }
-
-
 
    return   html_head() +
             html_style() +
