@@ -33,8 +33,8 @@ def about():
 
 @app.route('/fuel_watch')
 def fuel_watch():
-    return generate_fuel_watch_html_string(filtered=True, **kwargs)
-
+    #return generate_fuel_watch_html_string(filtered=True, **kwargs)
+    return "fuel watch"
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
