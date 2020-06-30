@@ -1,5 +1,6 @@
 from flask import Flask
-from fuel_watch_frontend import generate_fuel_watch_html_string
+
+# from fuel_watch_frontend import generate_fuel_watch_html_string
 
 app = Flask(__name__)
 
