@@ -116,13 +116,13 @@ def html_style():
     return style
 
 
-def html_navbar():
+def html_home_navbar():
     """Returns a webpage navbar.
     """
     navbar = '''
         <nav>
             <h3 class="logo">Marks Fuel Watch Project</h3>
-            <a href="About.html" color:"#27AE60" target="_blank">About Project</a>
+            <a href="/about" color:"#27AE60">About Project</a>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <a href="https://www.fuelwatch.wa.gov.au" target="_blank">Fuel Watch Website</a>
         </nav>
@@ -130,7 +130,21 @@ def html_navbar():
     return navbar
 
 
-def html_body(filtered=True, **kwargs):
+def html_about_navbar():
+    """Returns a webpage navbar.
+    """
+    navbar = '''
+        <nav>
+            <h3 class="logo">Marks Fuel Watch Project</h3>
+            <a href="/" color:"#27AE60">Home</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="https://www.fuelwatch.wa.gov.au" target="_blank">Fuel Watch Website</a>
+        </nav>
+    '''
+    return navbar
+
+
+def html_home_body(filtered=True, **kwargs):
     """Returns a webpage body.
     """
 
@@ -138,32 +152,83 @@ def html_body(filtered=True, **kwargs):
 
     today = str(dt.date.today())
 
-    thead = ''.join(
-        '<th>' + key.capitalize() + '</th>'
-        for key in data[0].keys())
+    body = '''
+<br>
+<hr>
+<br>
+<div style="overflow-x:auto;">
+<table border="1" width="100%">
+<thead>
+<tr>
+    '''
+    # Create the column labels from the data keys
+    for key in data[0].keys():
+        body = body + "<th>" + key.capitalize() + "</th>"
+    # Close out the column headings
+    body = body + "\n</tr>\n</thead>\n</div>"
 
-    tbody = ''.join(
-        '<tr class="{today_or_tomorrow}"><td>{price}</td><td>{address}</td><td>{brand}</td><td>{location}</td><tr>'.format(
-            today_or_tomorrow='today' if row['updated'] == today else 'tomorrow',
-            **row)
-        for row in data)
+    # Add each row of data to the table
+    body = body + "\n<tbody>"
+    for x in data:
+        if x['updated'] == today:
 
-    return '''
-        <br>
-        <hr>
-        <br>
-        <div style="overflow-x:auto;">
-        <table border="1" width="100%">
-            <thead>
-                <tr>
-                    {}
-                </tr>
-            </thead>
-            <tbody>
-                {}
-            </tbody>
-        </table>
-    '''.format(thead, tbody)
+            body = body + "\n<tr class='today'>"
+
+        else:
+            body = body + "\n<tr class='tomorrow'>"
+
+        for key, value in x.items():
+
+            body = body + "<td>" + str(value) + "</td>"
+
+        body = body + "\n</tr>"
+    body = body + "\n</tbody>"
+
+    return body
+
+def html_about_body():
+    """
+    """
+
+    about = """
+                <body>
+
+                    <h2>About the Fuel Watch Project</h2>
+                    <hr>
+                    <br>
+
+                    <div>
+                        <p>
+                            This project is a result of a Learn Python Course developed by
+                            Robin Chew.
+                        </p>
+                        <p>
+                           The course was run for 10 Weeks from march 2020 at the Bentley
+                           Technology centre in Perth Western Australia
+                        </p>
+                        <p>
+                            The objective of the course was to get the Perth Fuel Watch RSS
+                            feed, extract the data into a format that suited our
+                            own needs, then present the data in a html page.
+
+                        </p>
+
+                    </div>
+                <div class="footer">
+                    <strong>
+                    <em>
+                    <p>
+                    All data is sourced from the Fuel Watch Website,
+                    produced be the Government of Western Australia.
+                    </p>
+                    </em>
+                    </strong>
+                    <hr>
+                </div>
+
+                </body>
+            """
+    return about
 
 
 def html_footer():
@@ -187,34 +252,20 @@ def html_footer():
     return footer
 
 
-def generate_fuel_watch_html(filtered=True, **kwargs):
-    """
-
-    """
-    with open(r'html_files/Fuel Watch.html', 'w') as f:
-        f.write(
-            html_head() +
-            html_style() +
-            html_navbar() +
-            html_body(filtered, **kwargs) +
-            html_footer()
-        )
-
-def generate_fuel_watch_html_string(filtered=True, **kwargs):
+def generate_home_html_string(filtered=True, **kwargs):
     """
 
     """
 
-   return   html_head() +
-            html_style() +
-            html_navbar() +
-            html_body(filtered, **kwargs) +
-            html_footer() +
+    return html_head() + html_style() + html_home_navbar() + html_home_body(filtered, **kwargs) + html_footer()
 
 
+def generate_about_html_string():
+    """
+    """
+    return html_head() + html_style() + html_about_navbar() + html_about_body() + html_footer()
 
 
-`
 if __name__ == '__main__':
     """Run the fuel watch html generator with default filters
 
