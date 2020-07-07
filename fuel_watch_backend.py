@@ -1,11 +1,21 @@
-import feedparser
-from operator import attrgetter
-import requests
+import glob
+import json
+import os
+from datetime import datetime
 
+import feedparser
 import fuel_watch_filters as filters
+import pytz
+import requests
+import safer
+
+# Constants to keep track of the fuel watch data file list
+DATA_FILE_PATH = 'fuel_data'
+DATA_FILE_LIST = ''
+# DATA_FILE_LATEST = DATA_FILE_LIST[-1]
+
 
 # ========SORT FUNCTIONS===========
-
 
 def by_brand(item):
     return item['brand']
@@ -18,7 +28,15 @@ def by_location(item):
 def by_price(item):
     return item['price']
 
-# ========END SORT FUNCTIONS===========
+
+# ========URL FUNCTIONS===========
+def construct_file_name(**kwargs):
+    """Construct a file name for saving fuel data
+    """
+
+
+
+    pass
 
 
 def construct_fuel_watch_url(**kwargs):
@@ -41,7 +59,7 @@ def construct_fuel_watch_url(**kwargs):
     """
 
     # The URL to collect all the Fuel Watch data available without filters
-    URL = 'http://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?'
+    URL = 'https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?'
 
     # Get the valid filters and put them in a dict for ease of checking
     VALID_URL_FILTERS = {
@@ -71,7 +89,7 @@ def construct_fuel_watch_url(**kwargs):
                     URL = URL + "&" + "".join(
                         join_string_with_operator(
                             [key, VALID_URL_FILTERS[key][value]]))
-
+    print(URL)
     return URL
 
 
@@ -86,6 +104,14 @@ def join_string_with_operator(values=[], operator="="):
                         default is '='
     """
     return str(operator).join(values)
+
+
+def get_dict_key_from_value(value, **kwargs):
+    """Return the dictionary key based on a value
+    """
+    for key, val in kwargs.items():
+        if val == value:
+            return key
 
 
 def valid_fuel_watch_filter(key, value):
@@ -116,36 +142,163 @@ def valid_fuel_watch_filter(key, value):
         return False
 
 
-# TODO: Not working with a standard dict....Fix!
-def sort_dictionary_on_keys(list_of_dict=[], sort_keys=[]):
-    """Returns a sorted dictionary using the set of keys supplied for sort
+# ========FILE HANDLING===========
+
+def get_tomorrows_RSS_fuel_data(filter=True, **kwargs):
+    """Get tomorrows Fuel Watch Data and save to file
+    """
+    file_failed_list = []
+    days = ['tomorrow']
+
+    kwargs['Day'] = 'tomorrow'
+
+    # Get the dict of products to iterate over
+    prod = filters.Product()
+
+    # Cycle through the available days and collect fuel watch data
+    if tomorrow_RSS_data_available():
+        for day in days:
+            kwargs['Day'] = day
+
+            for key in prod.keys():
+
+                # FilterName is not a Product
+                if key != 'FilterName':
+                    kwargs['Product'] = key
+                    # Construct URL to get fuel watch data
+                    url = construct_fuel_watch_url(**kwargs)
+
+                    # Get tomorrows fuel watch data
+                    get_data = requests.get(url)
+
+                    # If response is ok, 200 parse the data
+                    if get_data.status_code == 200:
+                        parsed_data = feedparser.parse(get_data.content)['entries']
+
+                        # Make a file name with the the parsed data parameters
+                        # for saving to disk.
+                        file_name = join_string_with_operator(values=[
+                            parsed_data[0]['updated'],
+                            kwargs['StateRegion'],
+                            kwargs['Product'],
+                            ],
+                            operator='_') + '.json'
+
+                        # Use safer to  save to disk to ensure files are
+                        # not corrupted before closing.
+                        with safer.open(os.path.join('fuel_data', file_name), 'w') as fp:
+                            json.dump(parsed_data, fp)  # All of the file is written, or none
+
+                        if not check_file_name_saved_on_disk(file_name):
+                            file_failed_list.append(file_name)
+
+    print('Files Failed ', file_failed_list)
+
+
+def check_file_name_saved_on_disk(file_name):
+    """ Confirm file was written to disc
 
     PARAMATERS
     ==========
 
-    param:: *list_of_dict:-* A list of dictionaries to be sorted
-    param:: *sort_keys:-* A list of keys to sort the dictionaries on
+    param:: file_name
+    """
+
+    return file_name in get_saved_filename_list()
+
+
+def get_saved_filename_list(file_path=''):
+    """ Returns the file names currently saved on disk
+
+    PARAMATERS
+    ==========
+
+    param:: file_path: str default is DATA_FILE_PATH
+    """
+
+    if not file_path:
+
+        return list(sorted(glob.glob(DATA_FILE_PATH + '/*')))
+
+    else:
+        return list(sorted(glob.glob(file_path + '/*')))
+
+
+# ========DATE/TIME HANDLING===========
+
+def get_day_date(day='tomorrow'):
+    """Return the date for the supplied day for Perth TZ
+
+    Paramaters
+    ==========
+    param:: day: str options today, tomorrow, yesterday
+
+    """
+    timeZ_Pe = pytz.timezone('Australia/Perth')
+    today = datetime.date.today(timeZ_Pe)
+    yesterday = today - datetime.timedelta(days=1)
+    tomorrow = today + datetime.timedelta(days=1)
+
+    if day == 'today':
+        return today
+
+    elif day == 'tomorrow':
+        return tomorrow
+
+    else:
+        return yesterday
+
+
+def tomorrow_RSS_data_available():
+    """ Tomorrows Fuel Watch data is available after 14:30 today
+    """
+    timeZ_Pe = pytz.timezone('Australia/Perth')
+    now = datetime.now(timeZ_Pe)
+    data_available_now = now.replace(hour=14, minute=30, second=0, microsecond=0)
+
+    return now > data_available_now
+
+
+def fuel_watch_filtered_on_keys(data=[], keys_of_interest=[]):
+    """Returns a list of dictionaries filtered on keys_of_interest
+
+
+    Parameters
+    ==========
+
+    param:: data:- a list of dictionaries
+    param:: keys_of_interest: a list of keys to extract and return
 
     """
 
-    # Check a dictionary and list have been provided
-    if list_of_dict and sort_keys:
+    # Default set of keys from fuel watch data we want to
+    # display on our website
 
-        # Test the sort_keys[] are a subset of the dictionary keys
-        if all(key in list(list_of_dict[0].keys()) for key in sort_keys):
+    if not keys_of_interest:
 
-            print("All keys to sort by are a subset of the dictionary keys")
+        # Create default keys of interest, using the  html page column order
+        keys_of_interest = [
+            'updated',
+            'price',
+            'trading-name',
+            'brand',
+            'address',
+            'location',
+        ]
 
-            # Sort the list of dictionaries
-            list_sorted = sorted(list_of_dict, key=attrgetter(*sort_keys))
+    # Create an empty list to store dicts filtered on keys of interest
+    filtered_list = []
 
-            return list_sorted
-    else:
-        # Add an error message to the dictionary to alert user.
-        list_of_dict['ERROR:SORT'] = 'Unsorted dictionary has been returned: \
-        check the keys to sort on are valid'
+    # Filter the data using keys_of_interest
+    for x in data:
+        data_filtered = dict()
 
-        return list_of_dict
+        for key in keys_of_interest:
+            data_filtered[key] = x[key]
+
+        filtered_list.append(data_filtered)
+
+    return filtered_list
 
 
 # TODO Move all kwarg filter validations to entry point get_fuel_data
@@ -237,45 +390,3 @@ def get_fuel_data(filtered=True, **kwargs):
         sorted_data = sorted(data, key=by_price)
 
         return sorted_data
-
-
-def fuel_watch_filtered_on_keys(data=[], keys_of_interest=[]):
-    """Returns a list of dictionaries filtered on keys_of_interest
-
-
-    Parameters
-    ==========
-
-    param:: data:- a list of dictionaries
-    param:: keys_of_interest: a list of keys to extract and return
-
-    """
-
-    # Default set of keys from fuel watch data we want to
-    # display on our website
-
-    if not keys_of_interest:
-
-        # Create default keys of interest, using the  html page column order
-        keys_of_interest = [
-            'updated',
-            'price',
-            'trading-name',
-            'brand',
-            'address',
-            'location',
-        ]
-
-    # Create an empty list to store dicts filtered on keys of interest
-    filtered_list = []
-
-    # Filter the data using keys_of_interest
-    for x in data:
-        data_filtered = dict()
-
-        for key in keys_of_interest:
-            data_filtered[key] = x[key]
-
-        filtered_list.append(data_filtered)
-
-    return filtered_list

@@ -93,7 +93,7 @@ def Suburb():
     """Returns a dict of Suburbs available in fuelwatch @ 26/03/2020
     """
     Suburb = {
-         'Filtername': 'Suburb',
+         'FilterName': 'Suburb',
          'Albany': 'ALBANY', 'Alexander Heights': 'ALEXANDER HEIGHTS',
          'Alfred Cove': 'ALFRED COVE', 'Alkimos': 'ALKIMOS',
          'Applecross': 'APPLECROSS', 'Armadale': 'ARMADALE', 'Ascot': 'ASCOT',

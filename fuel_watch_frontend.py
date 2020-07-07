@@ -1,6 +1,7 @@
 import datetime as dt
 
 import fuel_watch_backend as fwb
+import fuel_watch_filters as filters
 
 
 def html_head():
@@ -15,12 +16,8 @@ def html_head():
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="icon" type="image/png" href="../static/media/favicon-16x16.png" />
     <title>
-        Fuel Watch
+       Marks Fuel Watch Project
     </title>
-    <img src="https://www.fuelwatch.wa.gov.au/fuelwatch/art/fuelwatch-logo.gif?
-    pfdrid_c=true" alt="../static/media/fuel_watch_logo.PNG"
-     height="50" width="70">
-
 </head>
     '''
     return head
@@ -32,16 +29,102 @@ def html_style():
     style = '''
 <style>
     h1 {
-         background: blue;
+         background: black;
          color: white;
          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     }
 
+    h2 {
+         background: #b1cdcd;
+         border-radius: 10px;
+         color: black;
+         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+         font-size: 13px;
+         padding: 10px;
+         text-align: centre;
+
+    }
+
+    input {
+         background: white;
+         color: black;
+         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+         padding: 5px;
+         text-align: left;
+
+    }
+
+    input.select {
+         border-radius: 10px;
+         background-color: #FCF3CF;
+         color: black;
+         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+         padding: 5px;
+         text-align: left;
+
+    }
+
+    label {
+         background: white;
+         color: black;
+         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+         padding: 5px;
+         text-align: left;
+
+    }
+
+    label.tomorrow {
+        border-radius: 10px;
+        font-size: 16px;
+        background-color: #F2D7D5;
+    }
+
+
     nav {
-         background-color: #F9E79F;
+         background-color: #FCF3CF;
          border-radius: 10px;
          padding: 10px;
          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    }
+
+    p.l {
+         background: white;
+         color: black;
+         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+         padding: 10px;
+         text-align: left;
+
+    }
+
+    p.c {
+         background: white;
+         color: black;
+         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+         padding: 10px;
+         text-align: left;
+
+    }
+    p.r {
+         background: white;
+         color: black;
+         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+         padding: 5px;
+         text-align: left;
+
+    }
+
+    p.tomorrow {
+        font-size: 12px;
+        background-color: #F2D7D5;
+    }
+
+    select {
+         background: white;
+         color: black;
+         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+         padding: 5px;
+         text-align: left;
+
     }
 
     table {
@@ -100,6 +183,31 @@ def html_style():
         color: blue;
     }
 
+    ul.nav {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #333;
+    }
+
+    li.nav {
+      float: left;
+    }
+
+    li.nav a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    /* Change the link color to #111 (black) on hover */
+    li.nav a:hover {
+      background-color: #111;
+    }
+
     .footer {
     position: fixed;
     left: 0;
@@ -120,12 +228,19 @@ def html_home_navbar():
     """Returns a webpage navbar.
     """
     navbar = '''
-        <nav>
-            <h3 class="logo">Marks Fuel Watch Project</h3>
-            <a href="/about" color:"#27AE60">About Project</a>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="https://www.fuelwatch.wa.gov.au" target="_blank">Fuel Watch Website</a>
-        </nav>
+        <div>
+            <nav>
+                <span style="float:right;">
+                <img class="pull-right" src="https://www.fuelwatch.wa.gov.au/fuelwatch/art/fuelwatch-logo.gif?
+                 pfdrid_c=true" alt="../static/media/fuel_watch_logo.PNG"
+                 height="75" width="105">
+                </span>
+                <h3 class="logo">Marks Fuel Watch Project</h3>
+                <a href="/about" color:"#27AE60">About Project</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="https://www.fuelwatch.wa.gov.au" target="_blank">Fuel Watch Website</a>
+            </nav>
+        </div>
     '''
     return navbar
 
@@ -134,33 +249,86 @@ def html_about_navbar():
     """Returns a webpage navbar.
     """
     navbar = '''
-        <nav>
-            <h3 class="logo">Marks Fuel Watch Project</h3>
-            <a href="/" color:"#27AE60">Home</a>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="https://www.fuelwatch.wa.gov.au" target="_blank">Fuel Watch Website</a>
-        </nav>
+        <div>
+            <nav>
+                <span style="float:right;">
+                <img class="pull-right" src="https://www.fuelwatch.wa.gov.au/fuelwatch/art/fuelwatch-logo.gif?
+                 pfdrid_c=true" alt="../static/media/fuel_watch_logo.PNG"
+                 height="75" width="105">
+                </span>
+                <h3 class="logo">Marks Fuel Watch Project</h3>
+                <a href="/" color:"#27AE60">Home</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="https://www.fuelwatch.wa.gov.au" target="_blank">Fuel Watch Website</a>
+            </nav>
+        </div>
     '''
     return navbar
 
 
 def html_home_body(filtered=True, **kwargs):
-    """Returns a webpage body.
+    """Return a HTML string containing the fuel watch data table.
     """
 
+    product = filters.Product()
+    suburb = filters.Suburb()
     data = fwb.get_fuel_data(filtered, **kwargs)
 
     today = str(dt.date.today())
 
     body = '''
-<br>
 <hr>
-<br>
 <div style="overflow-x:auto;">
 <table border="1" width="100%">
 <thead>
 <tr>
     '''
+
+    select_form = """
+    <div>
+    <form>
+      <label for="product">Product:</label>
+      <select name="product" id="product">
+    """
+    for key in product.keys():
+        if key == 'FilterName':
+            key = ''
+        select_form = select_form + f'<option value={key}>{key}</option>'
+
+    select_form = select_form + """
+      </select>
+      &nbsp;
+      <label for="suburb">Suburb:</label>
+      <select name="suburb" id="suburb">
+    """
+    for key in suburb.keys():
+        if key == 'FilterName':
+            key = ''
+        select_form = select_form + f'<option value={key}>{key}</option>'
+
+    select_form = select_form + """
+      </select>
+      &nbsp;
+      &nbsp;
+      <label for="surrounding">Include Surrounding:</label>
+      <input type="radio" checked="True" id="yes" name="surrounding" value="yes" />
+      <label for="yes">Yes</label>
+      <input type="radio" id="no" name="surrounding" value="no" />
+      <label for="no">No</label>
+      &nbsp;
+      &nbsp;
+      <input class="select" type="submit" value="submit" />
+      &nbsp;
+      &nbsp;
+      <label class='tomorrow'>Tomorrows data included after 2:30 PM</label>
+    </form>
+    <br>
+    <hr>
+    </div>
+    """
+
+    body = body + select_form
+
     # Create the column labels from the data keys
     for key in data[0].keys():
         body = body + "<th>" + key.capitalize() + "</th>"
@@ -186,47 +354,34 @@ def html_home_body(filtered=True, **kwargs):
 
     return body
 
+
 def html_about_body():
-    """
+    """ Return a HTML string containing the About page body
     """
 
     about = """
-                <body>
+    <body style="overflow-x:auto;">
+        <h2>About the Fuel Watch Project</h2>
+        <hr>
+        <br>
+        <div>
+            <p>
+                This project is a result of a Learn Python Course developed by
+                Robin Chew.
+            </p>
+            <p>
+               The course was run for 10 Weeks from march 2020 at the Bentley
+               Technology centre in Perth Western Australia, there was several
+               break due to the covid 19 pandemic.
+            </p>
+            <p>
+               The objective of the course was to get the Perth Fuel Watch RSS
+               feed, extract the data into a format that suited our
+               own needs, then present the data in a html page using Flask.
+            </p>
+        </div>
 
-                    <h2>About the Fuel Watch Project</h2>
-                    <hr>
-                    <br>
-
-                    <div>
-                        <p>
-                            This project is a result of a Learn Python Course developed by
-                            Robin Chew.
-                        </p>
-                        <p>
-                           The course was run for 10 Weeks from march 2020 at the Bentley
-                           Technology centre in Perth Western Australia
-                        </p>
-                        <p>
-                            The objective of the course was to get the Perth Fuel Watch RSS
-                            feed, extract the data into a format that suited our
-                            own needs, then present the data in a html page.
-
-                        </p>
-
-                    </div>
-                <div class="footer">
-                    <strong>
-                    <em>
-                    <p>
-                    All data is sourced from the Fuel Watch Website,
-                    produced be the Government of Western Australia.
-                    </p>
-                    </em>
-                    </strong>
-                    <hr>
-                </div>
-
-                </body>
+    </body>
             """
     return about
 
@@ -234,18 +389,18 @@ def html_about_body():
 def html_footer():
 
     footer = """
-<div class="footer">
-    <hr>
-    <strong>
-    <em>
-    <p>
-    All data is sourced from the Fuel Watch Website,
-    produced be the Government of Western Australia.
-    </p>
-    </em>
-    </strong>
-    <hr>
-</div>
+        <div class="footer">
+            <hr>
+            <strong>
+            <em>
+
+            All data is sourced from the Fuel Watch Website,
+            produced by the Government of Western Australia.
+
+            </em>
+            </strong>
+            <hr>
+        </div>
 
 
     """
@@ -256,6 +411,9 @@ def generate_home_html_string(filtered=True, **kwargs):
     """
 
     """
+
+    # Put the suburb name into the correct format
+    kwargs['Suburb'] = str.capitalize(kwargs['Suburb'])
 
     return html_head() + html_style() + html_home_navbar() + html_home_body(filtered, **kwargs) + html_footer()
 
@@ -273,9 +431,9 @@ if __name__ == '__main__':
     print('Generating file')
     kwargs = {"Region": '',
               "Suburb": '',
-              "Product": 'Unleaded Petrol',
+              "Product": '',
               "Day": '',
-              "Surrounding": 'yes',
+              "Surrounding": '',
               "Brand": '',
               "Sort_on": 'price',
               "keys_of_interest": [
@@ -288,5 +446,5 @@ if __name__ == '__main__':
               ],
               }
 
-    generate_fuel_watch_html(filtered=True, **kwargs)
+    generate_home_html_string(filtered=True, **kwargs)
     print('Fuel Watch.html has been generated and can be found in \html_files')
