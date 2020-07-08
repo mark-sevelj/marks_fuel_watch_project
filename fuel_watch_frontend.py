@@ -301,10 +301,15 @@ def html_home_body(filtered=True, **kwargs):
       <label for="product">Product:</label>
       <select name="product" id="product">
     """
+    # Create the Product dropdown selector
     for key in product.keys():
         if key == 'FilterName':
             key = ''
-        select_form = select_form + f'<option value={key}>{key}</option>'
+        # Renders the returned selectors with selection made by user
+        if key != kwargs['Product']:
+            select_form = select_form + f'<option value={key}>{key}</option>'
+        else:
+            select_form = select_form + f'<option value={key} selected>{key}</option>'
 
     select_form = select_form + """
       </select>
@@ -315,7 +320,11 @@ def html_home_body(filtered=True, **kwargs):
     for key in suburb.keys():
         if key == 'FilterName':
             key = ''
-        select_form = select_form + f'<option value={key}>{key}</option>'
+        # Renders the returned selectors with selection made by user
+        if key != kwargs['Suburb']:
+            select_form = select_form + f'<option value={key}>{key}</option>'
+        else:
+            select_form = select_form + f'<option value={key} selected>{key}</option>'
 
     select_form = select_form + """
       </select>
