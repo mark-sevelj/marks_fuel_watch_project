@@ -359,9 +359,9 @@ def get_fuel_data(filtered=True, **kwargs):
             kwargs['Day'] = 'tomorrow'
             url_tomorrow = construct_fuel_watch_url(**kwargs)
 
-        # Get tomorrows info and data.extend() to todays info
-        data.extend(feedparser.parse(
-            requests.get(url_tomorrow).content)['entries'])
+            # Get tomorrows info and data.extend() to todays info
+            data.extend(feedparser.parse(
+                requests.get(url_tomorrow).content)['entries'])
 
     else:
         url = construct_fuel_watch_url(**kwargs)
