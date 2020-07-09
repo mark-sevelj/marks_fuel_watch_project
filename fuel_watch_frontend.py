@@ -445,6 +445,7 @@ def generate_about_html_string():
 
 # + html_style()
 
+
 if __name__ == '__main__':
     """Run the fuel watch html generator with default filters
 

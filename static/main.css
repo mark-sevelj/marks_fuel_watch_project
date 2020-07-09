@@ -44,7 +44,7 @@ label {
 }
 
 label.tomorrow {
-    background-color: #F2D7D5;
+    background-color: #F2D7D5; # Pink
     border-radius: 10px;
     font-size: 16px;
     padding: 5px;
@@ -52,7 +52,7 @@ label.tomorrow {
 
 
 nav {
-     background-color: #FCF3CF;
+     background-color: #FCF3CF; # Yellow
      border-radius: 10px;
      padding: 10px;
      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -84,10 +84,10 @@ p.r {
 
 }
 
-p.tomorrow {
+/*p.tomorrow {
     font-size: 12px;
     background-color: #F2D7D5;
-}
+}*/
 
 select {
      background: white;
@@ -113,7 +113,7 @@ th, td {
 }
 
 th {
-    background-color: #FCF3CF;
+    background-color: #FCF3CF; # Yellow
     color: black;
     text-align: centre;
     padding: 15px;
@@ -121,13 +121,13 @@ th {
 
 tr.today {
     font-size: 12px;
-    background-color: #F2F3F4;
+    background-color: #F2F3F4; # Lt Grey
 
 }
 
 tr.tomorrow {
     font-size: 12px;
-    background-color: #F2D7D5;
+    background-color: #F2D7D5; # Pink
 }
 
 /*tr:nth-child(even) {background-color: #f5f5f5 ;}*/
