@@ -79,7 +79,7 @@ def construct_fuel_watch_url(**kwargs):
         if valid_fuel_watch_filter(key, value):
 
             # Check the length of URL string, if >54 then an "&"
-            # needs to be cocatinated with the additional filter
+            # needs to be concatinated with the additional filter
             if value:
                 if len(URL) < 55:
                     URL = URL + "".join(
@@ -354,9 +354,10 @@ def get_fuel_data(filtered=True, **kwargs):
         data = feedparser.parse(
             requests.get(url_today).content)['entries']
 
-        # Construct URL to get tomorrows fuel watch data
-        kwargs['Day'] = 'tomorrow'
-        url_tomorrow = construct_fuel_watch_url(**kwargs)
+        if tomorrow_RSS_data_available():
+            # Construct URL to get tomorrows fuel watch data
+            kwargs['Day'] = 'tomorrow'
+            url_tomorrow = construct_fuel_watch_url(**kwargs)
 
         # Get tomorrows info and data.extend() to todays info
         data.extend(feedparser.parse(

@@ -16,7 +16,7 @@ def fuel_watch():
               "Region": '',
               "Suburb": request.args.get("suburb", ''),
               "Product": request.args.get("product", ''),
-              "Day": 'today',
+              "Day": '',
               "Surrounding": request.args.get("surrounding", ''),
               "Brand": '',
               "Sort_on": 'price',
