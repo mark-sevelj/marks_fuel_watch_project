@@ -331,10 +331,22 @@ def html_home_body(filtered=True, **kwargs):
       &nbsp;
       &nbsp;
       <label for="surrounding">Include Surrounding:</label>
-      <input type="radio" checked="True" id="yes" name="surrounding" value="yes" />
-      <label for="yes">Yes</label>
-      <input type="radio" id="no" name="surrounding" value="no" />
-      <label for="no">No</label>
+      """
+    if kwargs['Surrounding'] == 'yes':
+        select_form = select_form + """
+        <input type="radio" checked="True" id="yes" name="surrounding" value="yes" />
+        <label for="yes">Yes</label>
+        <input type="radio" id="no" name="surrounding" value="no" />
+        <label for="no">No</label>
+        """
+    else:
+        select_form = select_form + """
+        <input type="radio" id="yes" name="surrounding" value="yes" />
+        <label for="yes">Yes</label>
+        <input type="radio" checked="True" id="no" name="surrounding" value="no" />
+        <label for="no">No</label>
+        """
+    select_form = select_form + """
       &nbsp;
       &nbsp;
       <input class="select" type="submit" value="submit" />
