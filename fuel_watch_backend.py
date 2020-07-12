@@ -12,7 +12,6 @@ import safer
 # Constants to keep track of the fuel watch data file list
 DATA_FILE_PATH = 'fuel_data'
 DATA_FILE_LIST = ''
-# DATA_FILE_LATEST = DATA_FILE_LIST[-1]
 
 
 # ========SORT FUNCTIONS===========
@@ -33,8 +32,6 @@ def by_price(item):
 def construct_file_name(**kwargs):
     """Construct a file name for saving fuel data
     """
-
-
 
     pass
 
@@ -274,11 +271,11 @@ def get_perth_date_time_as_string(day='today', date=True, time=False):
 
     elif day == 'tomorrow':
         return (today + timedelta(days=1))\
-                                         .strftime(date_format)
+                                .strftime(date_format)
 
     else:
         return (today - timedelta(days=1))\
-                                   .strftime(date_format)
+                                 .strftime(date_format)
 
 
 def tomorrow_RSS_data_available():

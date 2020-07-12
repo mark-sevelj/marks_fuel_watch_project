@@ -2,7 +2,6 @@ from datetime import datetime
 
 import fuel_watch_backend as fwb
 import fuel_watch_filters as filters
-import pytz
 
 
 def html_head():
@@ -36,216 +35,6 @@ def html_head():
     return head
 
 
-# def html_style():
-#     """Returns a webpage styling'
-#     """
-#     style = '''
-# <style>
-#     .footer {
-#         position: fixed;
-#         left: 0;
-#         bottom: 0;
-#         width: 100%;
-#         background-color: white;
-#         color: black;
-#         text-align: center;
-#         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-#         font-size: 12px;
-#     }
-
-#     h1 {
-#          background: black;
-#          color: white;
-#          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-#     }
-
-#     h2 {
-#          background: #b1cdcd;
-#          border-radius: 10px;
-#          color: black;
-#          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-#          font-size: 13px;
-#          padding: 10px;
-#          text-align: centre;
-
-#     }
-
-#     input {
-#          background: white;
-#          color: black;
-#          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-#          padding: 5px;
-#          text-align: left;
-
-#     }
-
-#     input.select {
-#          border-radius: 10px;
-#          background-color: #FCF3CF;
-#          color: black;
-#          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-#          padding: 5px;
-#          text-align: left;
-
-#     }
-
-#     label {
-#          background: white;
-#          color: black;
-#          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-#          padding: 5px;
-#          text-align: left;
-
-#     }
-
-#     label.tomorrow {
-#         background-color: #F2D7D5;
-#         border-radius: 10px;
-#         font-size: 16px;
-#         padding: 5px;
-#     }
-
-
-#     nav {
-#          background-color: #FCF3CF;
-#          border-radius: 10px;
-#          padding: 10px;
-#          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-#     }
-
-#     p {
-#          background: white;
-#          color: black;
-#          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-#          padding: 10px;
-#          text-align: left;
-
-#     p.l {
-#          background: white;
-#          color: black;
-#          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-#          padding: 10px;
-#          text-align: left;
-
-#     }
-
-#     p.c {
-#          background: white;
-#          color: black;
-#          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-#          padding: 10px;
-#          text-align: left;
-
-#     }
-#     p.r {
-#          background: white;
-#          color: black;
-#          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-#          padding: 5px;
-#          text-align: left;
-
-#     }
-
-#     p.tomorrow {
-#         font-size: 12px;
-#         background-color: #F2D7D5;
-#     }
-
-#     select {
-#          background: white;
-#          color: black;
-#          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-#          padding: 5px;
-#          text-align: left;
-
-#     }
-
-#     table {
-#         border-collapse: collapse;
-#         border: 1px solid black;
-#         border-radius: 10px;
-#         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-#         padding: 2px;
-#     }
-
-#     th, td {
-#         border: 1px solid black;
-#         padding: 15px;
-#         border-bottom: 1px solid #ddd;
-#     }
-
-#     th {
-#         background-color: #FCF3CF;
-#         color: black;
-#         text-align: centre;
-#         padding: 15px;
-#     }
-
-#     tr.today {
-#         font-size: 12px;
-#         background-color: #F2F3F4;
-
-#     }
-
-#     tr.tomorrow {
-#         font-size: 12px;
-#         background-color: #F2D7D5;
-#     }
-
-#     /*tr:nth-child(even) {background-color: #f5f5f5 ;}*/
-
-#     tr:hover {background-color: #E8F8F5;}
-
-#     /* unvisited link */
-#     a:link {
-#         color: #273746;
-#     }
-
-#     /* visited link */
-#     a:visited {
-#         color: #1D8348;
-#     }
-
-#     /* mouse over link */
-#     a:hover {
-#         color: hotpink;
-#     }
-
-#     /* selected link */
-#     a:active {
-#         color: blue;
-#     }
-
-#     ul.nav {
-#           list-style-type: none;
-#           margin: 0;
-#           padding: 0;
-#           overflow: hidden;
-#           background-color: #333;
-#     }
-
-#     li.nav {
-#       float: left;
-#     }
-
-#     li.nav a {
-#       display: block;
-#       color: white;
-#       text-align: center;
-#       padding: 14px 16px;
-#       text-decoration: none;
-#     }
-
-#     /* Change the link color to #111 (black) on hover */
-#     li.nav a:hover {
-#       background-color: #111;
-#     }
-
-# </style>
-#     '''
-#     return style
-
-
 def html_home_navbar():
     """Returns a webpage navbar.
     """
@@ -261,6 +50,7 @@ def html_home_navbar():
                 <h3 class="logo">Marks Fuel Watch Project</h3>
                 <p class="l"> Form Last Update Time:
         """
+
     navbar = navbar + fwb.get_perth_date_time_as_string(day='today', time=True)
 
     navbar = navbar + """
@@ -271,6 +61,7 @@ def html_home_navbar():
             </nav>
         </div>
     """
+
     return navbar
 
 
@@ -304,8 +95,6 @@ def html_home_body(filtered=True, **kwargs):
     data = fwb.get_fuel_data(filtered, **kwargs)
 
     today = fwb.get_perth_date_time_as_string(day='today')
-    # tomorrow = fwb.get_perth_date_time_as_string(day='tomorrow')
-    # today = str(dt.date.today())
 
     body = '''
 <hr>
