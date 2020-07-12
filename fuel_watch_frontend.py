@@ -247,12 +247,14 @@ def html_home_navbar():
                  pfdrid_c=true" alt="../static/media/fuel_watch_logo.PNG"
                  height="75" width="105">
                 </span>
-                <h3 class="logo">Marks Fuel Watch Project Current Time:
+                <span>
+                <h3 class="logo">Marks Fuel Watch Project</h3>
+                <p class="l"> Form Last Update Time:
         """
     navbar = navbar + fwb.get_perth_date_time_as_string()
 
     navbar = navbar + """
-                </h3>
+            </p>
                 <a href="/about" color:"#27AE60">About Project</a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <a href="https://www.fuelwatch.wa.gov.au" target="_blank">Fuel Watch Website</a>
