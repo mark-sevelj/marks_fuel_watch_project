@@ -1,7 +1,8 @@
-import datetime as dt
+from datetime import datetime
 
 import fuel_watch_backend as fwb
 import fuel_watch_filters as filters
+import pytz
 
 
 def html_head():
@@ -238,7 +239,7 @@ def html_head():
 def html_home_navbar():
     """Returns a webpage navbar.
     """
-    navbar = '''
+    navbar = """
         <div>
             <nav>
                 <span style="float:right;">
@@ -246,13 +247,18 @@ def html_home_navbar():
                  pfdrid_c=true" alt="../static/media/fuel_watch_logo.PNG"
                  height="75" width="105">
                 </span>
-                <h3 class="logo">Marks Fuel Watch Project</h3>
+                <h3 class="logo">Marks Fuel Watch Project Current Time:
+        """
+    navbar = navbar + fwb.get_perth_date_time_as_string()
+
+    navbar = navbar + """
+                </h3>
                 <a href="/about" color:"#27AE60">About Project</a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <a href="https://www.fuelwatch.wa.gov.au" target="_blank">Fuel Watch Website</a>
             </nav>
         </div>
-    '''
+    """
     return navbar
 
 
@@ -285,7 +291,9 @@ def html_home_body(filtered=True, **kwargs):
     suburb = filters.Suburb()
     data = fwb.get_fuel_data(filtered, **kwargs)
 
-    today = str(dt.date.today())
+    timeZ_Pe = pytz.timezone('Australia/Perth')
+    today = str(datetime.now(pytz.utc))
+    # today = str(dt.date.today())
 
     body = '''
 <hr>

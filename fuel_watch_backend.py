@@ -249,6 +249,17 @@ def get_day_date(day='tomorrow'):
         return yesterday
 
 
+def get_perth_date_time_as_string():
+    """Returns TZ aware date time for Perth Western Australia
+    """
+    timeZ_Pe = pytz.timezone('Australia/Perth')
+    utc_time = datetime.utcnow()
+    now = pytz.utc.localize(utc_time, is_dst=None)\
+        .astimezone(timeZ_Pe)\
+        .strftime("%Y-%m-%d %H:%M:%S")
+    return now
+
+
 def tomorrow_RSS_data_available():
     """ Tomorrows Fuel Watch data is available after 14:30 today
     """
