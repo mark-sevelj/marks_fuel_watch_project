@@ -1,7 +1,7 @@
+import datetime
 import glob
 import json
 import os
-from datetime import datetime
 
 import feedparser
 import fuel_watch_filters as filters
@@ -249,22 +249,42 @@ def get_day_date(day='tomorrow'):
         return yesterday
 
 
-def get_perth_date_time_as_string():
+def get_perth_date_time_as_string(day='today', date=True, time=False):
     """Returns TZ aware date time for Perth Western Australia
     """
+    date_format = "%Y-%m-%d"
+    time_format = "%H:%M:%S"
+
     timeZ_Pe = pytz.timezone('Australia/Perth')
-    utc_time = datetime.utcnow()
-    now = pytz.utc.localize(utc_time, is_dst=None)\
-        .astimezone(timeZ_Pe)\
-        .strftime("%Y-%m-%d %H:%M:%S")
-    return now
+    utc_time = datetime.datetime.utcnow()
+
+    # Generate the correct format for the return date time request
+    if date and not time:
+        return_format = date_format
+    elif date and time:
+        return_format = " ".join([date_format, time_format])
+    else:
+        return_format = time_format
+
+    # Generate today
+    today = timeZ_Pe.fromutc(utc_time)
+
+    if day == 'today':
+        return today.strftime(return_format)
+
+    elif day == 'tomorrow':
+        return (today + datetime.timedelta(days=1))\
+                                         .strftime(return_format)
+
+    else:
+        return str(today - datetime.timedelta(days=1))
 
 
 def tomorrow_RSS_data_available():
     """ Tomorrows Fuel Watch data is available after 14:30 today
     """
     timeZ_Pe = pytz.timezone('Australia/Perth')
-    now = datetime.now(timeZ_Pe)
+    now = datetime.datetime.now(timeZ_Pe)
     data_available_now = now.replace(hour=14, minute=30, second=0, microsecond=0)
 
     return now > data_available_now

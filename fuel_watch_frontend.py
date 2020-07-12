@@ -251,7 +251,7 @@ def html_home_navbar():
                 <h3 class="logo">Marks Fuel Watch Project</h3>
                 <p class="l"> Form Last Update Time:
         """
-    navbar = navbar + fwb.get_perth_date_time_as_string()
+    navbar = navbar + fwb.get_perth_date_time_as_string(day='tomorrow', time=True)
 
     navbar = navbar + """
             </p>
@@ -293,8 +293,8 @@ def html_home_body(filtered=True, **kwargs):
     suburb = filters.Suburb()
     data = fwb.get_fuel_data(filtered, **kwargs)
 
-    timeZ_Pe = pytz.timezone('Australia/Perth')
-    today = str(datetime.now(pytz.utc))
+    today = fwb.get_perth_date_time_as_string(day='today')
+    # tomorrow = fwb.get_perth_date_time_as_string(day='tomorrow')
     # today = str(dt.date.today())
 
     body = '''
