@@ -170,30 +170,44 @@ def html_home_body(filtered=True, **kwargs):
 
     body = body + select_form
 
-    # Create the column labels from the data keys
-    for key in data[0].keys():
-        body = body + "<th>" + key.capitalize() + "</th>"
-    # Close out the column headings
-    body = body + "\n</tr>\n</thead>\n</div>"
+    try:
+        # Create the column labels from the data keys
+        for key in data[0].keys():
+            body = body + "<th>" + key.capitalize() + "</th>"
+        # Close out the column headings
+        body = body + "\n</tr>\n</thead>\n</div>"
 
-    # Add each row of data to the table
-    body = body + "\n<tbody>"
-    for x in data:
-        if x['updated'] == today:
+        # Add each row of data to the table
+        body = body + "\n<tbody>"
+        for x in data:
+            if x['updated'] == today:
 
-            body = body + "\n<tr class='today'>"
+                body = body + "\n<tr class='today'>"
 
-        else:
-            body = body + "\n<tr class='tomorrow'>"
+            else:
+                body = body + "\n<tr class='tomorrow'>"
 
-        for key, value in x.items():
+            for key, value in x.items():
 
-            body = body + "<td>" + str(value) + "</td>"
+                body = body + "<td>" + str(value) + "</td>"
 
-        body = body + "\n</tr>"
-    body = body + "\n</tbody>"
+            body = body + "\n</tr>"
+        body = body + "\n</tbody>"
 
-    return body
+        return body
+
+    except Exception:
+        body = body + """
+        <div>
+            <p class='error'>The search you have requested doesnt seem to have the information available</p>
+            &nbsp;&nbsp;
+            <p class='error'>Please make another selection, perhaps with a nearby town or include surroundings may help</p>
+            &nbsp;&nbsp;
+            <img class='error' src="static/media/oops.png" alt="" >
+        </div>
+        """
+
+        return body
 
 
 def html_about_body():
