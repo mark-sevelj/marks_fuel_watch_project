@@ -1,11 +1,11 @@
 h1 {
-         background: black;
-         color: white;
-         font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+     background: black;
+     color: white;
+     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     }
 
 h2 {
-     background: #b1cdcd;
+     /*background: #b1cdcd;*/
      border-radius: 10px;
      color: black;
      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -24,15 +24,6 @@ input {
 
 }
 
-input.select {
-     border-radius: 10px;
-     background-color: #FCF3CF;
-     color: black;
-     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-     padding: 5px;
-     text-align: left;
-
-}
 
 label {
      background: white;
@@ -56,32 +47,6 @@ nav {
      border-radius: 10px;
      padding: 10px;
      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-}
-
-p.l {
-     background: white;
-     color: black;
-     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-     padding: 10px;
-     text-align: left;
-
-}
-
-p.c {
-     background: white;
-     color: black;
-     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-     padding: 10px;
-     text-align: left;
-
-}
-p.r {
-     background: white;
-     color: black;
-     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-     padding: 5px;
-     text-align: left;
-
 }
 
 /*p.tomorrow {
@@ -179,6 +144,27 @@ li.nav a:hover {
   background-color: #111;
 }
 
+.centre {
+     background: white;
+     color: black;
+     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+     padding: 10px;
+     text-align: left;
+
+}
+
+.error {
+     background: #F2D7D5; # Pink
+     border-radius: 10px;
+     width: 100%;
+     color: black;
+     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+     font-size: 15px;
+     padding: 10px;
+     text-align: centre;
+
+}
+
 .footer {
     position: fixed;
     left: 0;
@@ -189,4 +175,32 @@ li.nav a:hover {
     text-align: center;
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     font-size: 12px;
+}
+
+.left{
+     background: white;
+     color: black;
+     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+     padding: 10px;
+     text-align: left;
+
+}
+
+.right {
+     background: white;
+     color: black;
+     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+     padding: 5px;
+     text-align: left;
+
+}
+
+.select {
+     border-radius: 10px;
+     background-color: #FCF3CF;
+     color: black;
+     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+     padding: 5px;
+     text-align: left;
+
 }
