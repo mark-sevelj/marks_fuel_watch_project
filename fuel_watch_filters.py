@@ -35,7 +35,7 @@ def Product():
     Product = {
         'FilterName': 'Product',
         'Unleaded': '1', 'Premium': '2', 'Diesel': '4',
-        'LPG': '5', '98 RON': '6', 'E85': '10', 'Brand diesel': '11'
+        'LPG': '5', '98-RON': '6', 'E85': '10', 'Brand-diesel': '11'
     }
     return Product
 
