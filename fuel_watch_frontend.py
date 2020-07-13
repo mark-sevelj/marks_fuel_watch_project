@@ -48,7 +48,7 @@ def html_home_navbar():
                 </span>
                 <span>
                 <h3 class="logo">Marks Fuel Watch Project</h3>
-                <p class="l"> Form Last Update Time:
+                <p class="left"> Form Last Update Time:
         """
 
     navbar = navbar + fwb.get_perth_date_time_as_string(day='today', time=True)
@@ -200,10 +200,9 @@ def html_home_body(filtered=True, **kwargs):
         body = body + """
         <div>
             <p class='error'>The search you have requested doesnt seem to have the information available</p>
-            &nbsp;&nbsp;
             <p class='error'>Please make another selection, perhaps with a nearby town or include surroundings may help</p>
-            &nbsp;&nbsp;
-            <img class='error' src="static/media/oops.png" alt="" >
+            &nbsp;
+            <img class='imgcenter' src="static/media/oops.png" alt="OOPS! An Error Has Occured" style="width:500px;height:300px;">
         </div>
         """
 
