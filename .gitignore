@@ -1,0 +1,10 @@
+__pycache__
+
+# Data Folders
+fuel_data/
+
+
+# Jupyter Files
+.ipynb_checkpoints
+
+venv/
