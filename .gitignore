@@ -2,9 +2,14 @@ __pycache__
 
 # Data Folders
 fuel_data/
+local_data/
+zipped_data/
 
 
 # Jupyter Files
 .ipynb_checkpoints
+*.ipynb
 
 venv/
+
+.vscode

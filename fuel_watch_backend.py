@@ -10,30 +10,26 @@ import requests
 import safer
 
 # Constants to keep track of the fuel watch data file list
-DATA_FILE_PATH = 'fuel_data'
-DATA_FILE_LIST = ''
+DATA_FILE_PATH = "fuel_data"
+DATA_FILE_LIST = ""
 
 
 # ========SORT FUNCTIONS===========
 
+
 def by_brand(item):
-    return item['brand']
+    return item["brand"]
 
 
 def by_location(item):
-    return item['location']
+    return item["location"]
 
 
 def by_price(item):
-    return item['price']
+    return item["price"]
 
 
 # ========URL FUNCTIONS===========
-def construct_file_name(**kwargs):
-    """Construct a file name for saving fuel data
-    """
-
-    pass
 
 
 def construct_fuel_watch_url(**kwargs):
@@ -56,7 +52,7 @@ def construct_fuel_watch_url(**kwargs):
     """
 
     # The URL to collect all the Fuel Watch data available without filters
-    URL = 'https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?'
+    URL = "https://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?"
 
     # Get the valid filters and put them in a dict for ease of checking
     VALID_URL_FILTERS = {
@@ -80,12 +76,18 @@ def construct_fuel_watch_url(**kwargs):
             if value:
                 if len(URL) < 55:
                     URL = URL + "".join(
-                        join_string_with_operator(
-                            [key, VALID_URL_FILTERS[key][value]]))
+                        join_string_with_operator([key, VALID_URL_FILTERS[key][value]])
+                    )
                 else:
-                    URL = URL + "&" + "".join(
-                        join_string_with_operator(
-                            [key, VALID_URL_FILTERS[key][value]]))
+                    URL = (
+                        URL
+                        + "&"
+                        + "".join(
+                            join_string_with_operator(
+                                [key, VALID_URL_FILTERS[key][value]]
+                            )
+                        )
+                    )
     print(URL)
     return URL
 
@@ -129,9 +131,14 @@ def valid_fuel_watch_filter(key, value):
 
     # ALert user some how.... print for now
     elif key in VALID_URL_FILTERS.keys() and value != "":
-        print('Please supply a valid filter,\
-             this is not valid\n', key, ' : ',
-              value, '\n default values have been used')
+        print(
+            "Please supply a valid filter,\
+             this is not valid\n",
+            key,
+            " : ",
+            value,
+            "\n default values have been used",
+        )
 
         return False
 
@@ -141,13 +148,14 @@ def valid_fuel_watch_filter(key, value):
 
 # ========FILE HANDLING===========
 
+
 def get_tomorrows_RSS_fuel_data(filter=True, **kwargs):
     """Get tomorrows Fuel Watch Data and save to file
     """
     file_failed_list = []
-    days = ['tomorrow']
+    days = ["tomorrow"]
 
-    kwargs['Day'] = 'tomorrow'
+    kwargs["Day"] = "tomorrow"
 
     # Get the dict of products to iterate over
     prod = filters.Product()
@@ -155,13 +163,13 @@ def get_tomorrows_RSS_fuel_data(filter=True, **kwargs):
     # Cycle through the available days and collect fuel watch data
     if tomorrow_RSS_data_available():
         for day in days:
-            kwargs['Day'] = day
+            kwargs["Day"] = day
 
             for key in prod.keys():
 
                 # FilterName is not a Product
-                if key != 'FilterName':
-                    kwargs['Product'] = key
+                if key != "FilterName":
+                    kwargs["Product"] = key
                     # Construct URL to get fuel watch data
                     url = construct_fuel_watch_url(**kwargs)
 
@@ -170,26 +178,35 @@ def get_tomorrows_RSS_fuel_data(filter=True, **kwargs):
 
                     # If response is ok, 200 parse the data
                     if get_data.status_code == 200:
-                        parsed_data = feedparser.parse(get_data.content)['entries']
+                        parsed_data = feedparser.parse(get_data.content)["entries"]
 
                         # Make a file name with the the parsed data parameters
                         # for saving to disk.
-                        file_name = join_string_with_operator(values=[
-                            parsed_data[0]['updated'],
-                            kwargs['StateRegion'],
-                            kwargs['Product'],
-                            ],
-                            operator='_') + '.json'
+                        file_name = (
+                            join_string_with_operator(
+                                values=[
+                                    parsed_data[0]["updated"],
+                                    kwargs["StateRegion"],
+                                    kwargs["Product"],
+                                ],
+                                operator="_",
+                            )
+                            + ".json"
+                        )
 
                         # Use safer to  save to disk to ensure files are
                         # not corrupted before closing.
-                        with safer.open(os.path.join('fuel_data', file_name), 'w') as fp:
-                            json.dump(parsed_data, fp)  # All of the file is written, or none
+                        with safer.open(
+                            os.path.join("fuel_data", file_name), "w"
+                        ) as fp:
+                            json.dump(
+                                parsed_data, fp
+                            )  # All of the file is written, or none
 
                         if not check_file_name_saved_on_disk(file_name):
                             file_failed_list.append(file_name)
 
-    print('Files Failed ', file_failed_list)
+    print("Files Failed ", file_failed_list)
 
 
 def check_file_name_saved_on_disk(file_name):
@@ -204,7 +221,7 @@ def check_file_name_saved_on_disk(file_name):
     return file_name in get_saved_filename_list()
 
 
-def get_saved_filename_list(file_path=''):
+def get_saved_filename_list(file_path=""):
     """ Returns the file names currently saved on disk
 
     PARAMATERS
@@ -215,15 +232,16 @@ def get_saved_filename_list(file_path=''):
 
     if not file_path:
 
-        return list(sorted(glob.glob(DATA_FILE_PATH + '/*')))
+        return list(sorted(glob.glob(DATA_FILE_PATH + "/*")))
 
     else:
-        return list(sorted(glob.glob(file_path + '/*')))
+        return list(sorted(glob.glob(file_path + "/*")))
 
 
 # ========DATE/TIME HANDLING===========
 
-def get_day_date(day='tomorrow'):
+
+def get_day_date(day="tomorrow"):
     """Return the date for the supplied day for Perth TZ
 
     Paramaters
@@ -231,28 +249,28 @@ def get_day_date(day='tomorrow'):
     param:: day: str options today, tomorrow, yesterday
 
     """
-    timeZ_Pe = pytz.timezone('Australia/Perth')
+    timeZ_Pe = pytz.timezone("Australia/Perth")
     today = datetime.date.today(timeZ_Pe)
     yesterday = today - datetime.timedelta(days=1)
     tomorrow = today + datetime.timedelta(days=1)
 
-    if day == 'today':
+    if day == "today":
         return today
 
-    elif day == 'tomorrow':
+    elif day == "tomorrow":
         return tomorrow
 
     else:
         return yesterday
 
 
-def get_perth_date_time_as_string(day='today', date=True, time=False):
+def get_perth_date_time_as_string(day="today", date=True, time=False):
     """Returns TZ aware date time for Perth Western Australia
     """
     date_format = "%Y-%m-%d"
     time_format = "%H:%M:%S"
 
-    timeZ_Pe = pytz.timezone('Australia/Perth')
+    timeZ_Pe = pytz.timezone("Australia/Perth")
 
     # Generate the correct format for the return date time request
     if date and not time:
@@ -266,22 +284,20 @@ def get_perth_date_time_as_string(day='today', date=True, time=False):
     # Answer 18 from
     today = timeZ_Pe.fromutc(datetime.utcnow())
 
-    if day == 'today':
+    if day == "today":
         return today.strftime(return_format)
 
-    elif day == 'tomorrow':
-        return (today + timedelta(days=1))\
-                                .strftime(date_format)
+    elif day == "tomorrow":
+        return (today + timedelta(days=1)).strftime(date_format)
 
     else:
-        return (today - timedelta(days=1))\
-                                 .strftime(date_format)
+        return (today - timedelta(days=1)).strftime(date_format)
 
 
 def tomorrow_RSS_data_available():
     """ Tomorrows Fuel Watch data is available after 14:30 today
     """
-    timeZ_Pe = pytz.timezone('Australia/Perth')
+    timeZ_Pe = pytz.timezone("Australia/Perth")
     # now = datetime.now(timeZ_Pe)
     now = timeZ_Pe.fromutc(datetime.utcnow())
     data_available_now = now.replace(hour=14, minute=30, second=0, microsecond=0)
@@ -308,12 +324,12 @@ def fuel_watch_filtered_on_keys(data=[], keys_of_interest=[]):
 
         # Create default keys of interest, using the  html page column order
         keys_of_interest = [
-            'updated',
-            'price',
-            'trading-name',
-            'brand',
-            'address',
-            'location',
+            "updated",
+            "price",
+            "trading-name",
+            "brand",
+            "address",
+            "location",
         ]
 
     # Create an empty list to store dicts filtered on keys of interest
@@ -374,44 +390,42 @@ def get_fuel_data(filtered=True, **kwargs):
 
     # Check if today and tomorrows fuel watch info is required
 
-    if kwargs['Day'] == '' or kwargs['Day'] == 'today_tomorrow':
+    if kwargs["Day"] == "" or kwargs["Day"] == "today_tomorrow":
 
         # Construct URL to get todays fuel watch data
-        kwargs['Day'] = 'today'
+        kwargs["Day"] = "today"
         url_today = construct_fuel_watch_url(**kwargs)
 
         # Get todays fuel watch data
-        data = feedparser.parse(
-            requests.get(url_today).content)['entries']
+        data = feedparser.parse(requests.get(url_today).content)["entries"]
 
         if tomorrow_RSS_data_available():
             # Construct URL to get tomorrows fuel watch data
-            kwargs['Day'] = 'tomorrow'
+            kwargs["Day"] = "tomorrow"
             url_tomorrow = construct_fuel_watch_url(**kwargs)
 
             # Get tomorrows info and data.extend() to todays info
-            data.extend(feedparser.parse(
-                requests.get(url_tomorrow).content)['entries'])
+            data.extend(feedparser.parse(requests.get(url_tomorrow).content)["entries"])
 
     else:
         url = construct_fuel_watch_url(**kwargs)
-        data = feedparser.parse(
-            requests.get(url).content)['entries']
+        data = feedparser.parse(requests.get(url).content)["entries"]
 
     if filtered:
         filtered_data = fuel_watch_filtered_on_keys(
-            data=data, keys_of_interest=kwargs['keys_of_interest'])
+            data=data, keys_of_interest=kwargs["keys_of_interest"]
+        )
 
-        if kwargs['Sort_on']:
+        if kwargs["Sort_on"]:
 
-            if kwargs['Sort_on'] == 'brand':
+            if kwargs["Sort_on"] == "brand":
 
                 return sorted(filtered_data, key=by_brand)
 
-            elif kwargs['Sort_on'] == 'location':
+            elif kwargs["Sort_on"] == "location":
                 return sorted(filtered_data, key=by_location)
 
-            elif kwargs['Sort_on'] == 'price':
+            elif kwargs["Sort_on"] == "price":
                 return sorted(filtered_data, key=by_price)
 
         else:

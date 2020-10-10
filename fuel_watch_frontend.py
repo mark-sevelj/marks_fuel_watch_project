@@ -7,7 +7,7 @@ import fuel_watch_filters as filters
 def html_head():
     """Returns a webpage head.
     """
-    head = '''
+    head = """
     <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +31,7 @@ def html_head():
     </title>
 
 </head>
-    '''
+    """
     return head
 
 
@@ -51,9 +51,11 @@ def html_home_navbar():
                 <p class="left"> Form Last Update Time:
         """
 
-    navbar = navbar + fwb.get_perth_date_time_as_string(day='today', time=True)
+    navbar = navbar + fwb.get_perth_date_time_as_string(day="today", time=True)
 
-    navbar = navbar + """
+    navbar = (
+        navbar
+        + """
             </p>
                 <a href="/about" color:"#27AE60">About Project</a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -61,6 +63,7 @@ def html_home_navbar():
             </nav>
         </div>
     """
+    )
 
     return navbar
 
@@ -68,7 +71,7 @@ def html_home_navbar():
 def html_about_navbar():
     """Returns a webpage navbar.
     """
-    navbar = '''
+    navbar = """
         <div>
             <nav>
                 <span style="float:right;">
@@ -82,7 +85,7 @@ def html_about_navbar():
                 <a href="https://www.fuelwatch.wa.gov.au" target="_blank">Fuel Watch Website</a>
             </nav>
         </div>
-    '''
+    """
     return navbar
 
 
@@ -94,15 +97,15 @@ def html_home_body(filtered=True, **kwargs):
     suburb = filters.Suburb()
     data = fwb.get_fuel_data(filtered, **kwargs)
 
-    today = fwb.get_perth_date_time_as_string(day='today')
+    today = fwb.get_perth_date_time_as_string(day="today")
 
-    body = '''
+    body = """
 <hr>
 <div style="overflow-x:auto;">
 <table border="1" width="100%">
 <thead>
 <tr>
-    '''
+    """
 
     select_form = """
     <div>
@@ -112,50 +115,64 @@ def html_home_body(filtered=True, **kwargs):
     """
     # Create the Product dropdown selector
     for key in product.keys():
-        if key == 'FilterName':
-            key = ''
+        if key == "FilterName":
+            key = ""
         # Renders the returned selectors with selection made by user
-        if key != kwargs['Product']:
-            select_form = select_form + f'<option value={key}>{key}</option>'
+        if key != kwargs["Product"]:
+            select_form = select_form + f"<option value={key}>{key}</option>"
         else:
-            select_form = select_form + f'<option value={key} selected>{key}</option>'
+            select_form = select_form + f"<option value={key} selected>{key}</option>"
 
-    select_form = select_form + """
+    select_form = (
+        select_form
+        + """
       </select>
       &nbsp;
       <label for="suburb">Suburb:</label>
       <select name="suburb" id="suburb">
     """
+    )
     for key in suburb.keys():
-        if key == 'FilterName':
-            key = ''
+        if key == "FilterName":
+            key = ""
         # Renders the returned selectors with selection made by user
-        if key != kwargs['Suburb']:
-            select_form = select_form + f'<option value={key}>{key}</option>'
+        if key != kwargs["Suburb"]:
+            select_form = select_form + f"<option value={key}>{key}</option>"
         else:
-            select_form = select_form + f'<option value={key} selected>{key}</option>'
+            select_form = select_form + f"<option value={key} selected>{key}</option>"
 
-    select_form = select_form + """
+    select_form = (
+        select_form
+        + """
       </select>
       &nbsp;
       &nbsp;
       <label for="surrounding">Include Surrounding:</label>
       """
-    if kwargs['Surrounding'] == 'yes':
-        select_form = select_form + """
+    )
+    if kwargs["Surrounding"] == "yes":
+        select_form = (
+            select_form
+            + """
         <input type="radio" checked="True" id="yes" name="surrounding" value="yes" />
         <label for="yes">Yes</label>
         <input type="radio" id="no" name="surrounding" value="no" />
         <label for="no">No</label>
         """
+        )
     else:
-        select_form = select_form + """
+        select_form = (
+            select_form
+            + """
         <input type="radio" id="yes" name="surrounding" value="yes" />
         <label for="yes">Yes</label>
         <input type="radio" checked="True" id="no" name="surrounding" value="no" />
         <label for="no">No</label>
         """
-    select_form = select_form + """
+        )
+    select_form = (
+        select_form
+        + """
       &nbsp;
       &nbsp;
       <input class="select" type="submit" value="submit" />
@@ -167,6 +184,7 @@ def html_home_body(filtered=True, **kwargs):
     <hr>
     </div>
     """
+    )
 
     body = body + select_form
 
@@ -180,7 +198,7 @@ def html_home_body(filtered=True, **kwargs):
         # Add each row of data to the table
         body = body + "\n<tbody>"
         for x in data:
-            if x['updated'] == today:
+            if x["updated"] == today:
 
                 body = body + "\n<tr class='today'>"
 
@@ -197,7 +215,9 @@ def html_home_body(filtered=True, **kwargs):
         return body
 
     except Exception:
-        body = body + """
+        body = (
+            body
+            + """
         <div>
             <p class='error'>The search you have requested doesnt seem to have the information available</p>
             <p class='error'>Please make another selection, perhaps with a nearby town or include surroundings may help</p>
@@ -205,6 +225,7 @@ def html_home_body(filtered=True, **kwargs):
             <img class='imgcenter' src="static/media/oops.png" alt="OOPS! An Error Has Occured" style="width:500px;height:300px;">
         </div>
         """
+        )
 
         return body
 
@@ -267,9 +288,14 @@ def generate_home_html_string(filtered=True, **kwargs):
     """
 
     # Put the suburb name into the correct format
-    kwargs['Suburb'] = str.capitalize(kwargs['Suburb'])
+    kwargs["Suburb"] = str.capitalize(kwargs["Suburb"])
 
-    return html_head() + html_home_navbar() + html_home_body(filtered, **kwargs) + html_footer()
+    return (
+        html_head()
+        + html_home_navbar()
+        + html_home_body(filtered, **kwargs)
+        + html_footer()
+    )
 
 
 def generate_about_html_string():
@@ -277,30 +303,32 @@ def generate_about_html_string():
     """
     return html_head() + html_about_navbar() + html_about_body() + html_footer()
 
+
 # + html_style()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     """Run the fuel watch html generator with default filters
 
     """
-    print('Generating file')
-    kwargs = {"Region": '',
-              "Suburb": '',
-              "Product": '',
-              "Day": '',
-              "Surrounding": '',
-              "Brand": '',
-              "Sort_on": 'price',
-              "keys_of_interest": [
-                  'updated',
-                  'price',
-                  'trading-name',
-                  'brand',
-                  'address',
-                  'location',
-              ],
-              }
+    print("Generating file")
+    kwargs = {
+        "Region": "",
+        "Suburb": "",
+        "Product": "",
+        "Day": "",
+        "Surrounding": "",
+        "Brand": "",
+        "Sort_on": "price",
+        "keys_of_interest": [
+            "updated",
+            "price",
+            "trading-name",
+            "brand",
+            "address",
+            "location",
+        ],
+    }
 
     generate_home_html_string(filtered=True, **kwargs)
-    print('Fuel Watch.html has been generated and can be found in \html_files')
+    print("Fuel Watch.html has been generated and can be found in \html_files")
